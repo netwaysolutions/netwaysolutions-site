@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NetwaySolutions — Networking & Windows Infrastructure pentru companii</title>
+<meta name="description" content="Networking (FortiGate, Cisco, UniFi) + Windows Server, Active Directory, virtualizare, Microsoft 365. Abonamente lunare cu SLA, proiecte one-time, bundle cu discount.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0A0E1A;
+  --bg-elev: #0F1424;
+  --surface: #131A2E;
+  --border: #1F2940;
+  --border-bright: #2C3854;
+  --text: #F4F6FB;
+  --text-dim: #9AA3BC;
+  --text-mute: #6A7390;
+  --accent: #FF6B1A;
+  --accent-soft: rgba(255, 107, 26, 0.12);
+  --accent-glow: rgba(255, 107, 26, 0.35);
+  --navy: #1A2B5C;
+  --success: #4ADE80;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle network grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.25;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  pointer-events: none;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+/* ===== NAV ===== */
+nav {
+  position: sticky;
+  top: 0;
+  background: rgba(10, 14, 26, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.logo {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-mark {
+  width: 28px;
+  height: 28px;
+  position: relative;
+  display: inline-block;
+}
+.logo-mark::before, .logo-mark::after {
+  content: '';
+  position: absolute;
+  background: var(--accent);
+}
+.logo-mark::before {
+  width: 100%; height: 3px; top: 50%; transform: translateY(-50%);
+}
+.logo-mark::after {
+  width: 3px; height: 100%; left: 50%; transform: translateX(-50%);
+}
+.logo-mark span {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--text);
+  z-index: 2;
+}
+.logo-mark span:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); }
+.logo-mark span:nth-child(2) { bottom: 0; left: 50%; transform: translateX(-50%); }
+.logo-mark span:nth-child(3) { left: 0; top: 50%; transform: translateY(-50%); background: var(--accent); }
+.logo-mark span:nth-child(4) { right: 0; top: 50%; transform: translateY(-50%); background: var(--accent); }
+
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-cta {
+  background: var(--accent);
+  color: white !important;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600 !important;
+}
+.nav-cta:hover { background: #ff7d35; color: white !important; }
+
+@media (max-width: 720px) {
+  .nav-links a:not(.nav-cta) { display: none; }
+}
+
+/* ===== HERO ===== */
+.hero {
+  padding: 100px 0 80px;
+  position: relative;
+}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid rgba(255, 107, 26, 0.3);
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin-bottom: 28px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.hero-tag::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--accent-glow);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+h1 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  max-width: 900px;
+}
+h1 .accent { color: var(--accent); position: relative; }
+h1 .accent::after {
+  content: '_';
+  color: var(--accent);
+  animation: blink 1.2s steps(2, start) infinite;
+}
+@keyframes blink {
+  to { visibility: hidden; }
+}
+
+.hero-sub {
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  color: var(--text-dim);
+  max-width: 640px;
+  margin-bottom: 40px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 4px 24px var(--accent-glow);
+}
+.btn-primary:hover {
+  background: #ff7d35;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px var(--accent-glow);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border-bright);
+}
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn-whatsapp {
+  background: #25D366;
+  color: white;
+}
+.btn-whatsapp:hover { background: #1fb556; }
+
+/* Hero stats / trust row */
+.hero-trust {
+  margin-top: 60px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.trust-item {
+  display: flex;
+  flex-direction: column;
+}
+.trust-num {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.trust-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ===== SECTIONS ===== */
+section { padding: 80px 0; position: relative; }
+.section-head {
+  margin-bottom: 56px;
+  max-width: 720px;
+}
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 14px;
+}
+h2 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.section-sub {
+  color: var(--text-dim);
+  font-size: 1.05rem;
+}
+
+/* ===== PACKAGES ===== */
+.packages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 24px;
+}
+
+.pkg {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px 32px;
+  position: relative;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+.pkg:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-4px);
+}
+.pkg-featured {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, rgba(255, 107, 26, 0.06) 0%, var(--surface) 60%);
+}
+.pkg-featured::before {
+  content: 'CEL MAI POPULAR';
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: white;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 4px 14px;
+  border-radius: 100px;
+}
+
+.pkg-name {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.pkg-target {
+  font-size: 0.9rem;
+  color: var(--text-mute);
+  margin-bottom: 24px;
+  min-height: 2.6rem;
+}
+.pkg-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.pkg-price-from {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.pkg-price-amt {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.pkg-price-cur {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+  color: var(--text-dim);
+}
+
+.pkg-features {
+  list-style: none;
+  margin: 28px 0;
+  flex: 1;
+}
+.pkg-features li {
+  padding: 8px 0;
+  display: flex;
+  gap: 12px;
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  align-items: flex-start;
+}
+.pkg-features li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 5px;
+  background: var(--accent-soft);
+  border-radius: 50%;
+  position: relative;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3 8l3 3 7-7' stroke='%23FF6B1A' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.pkg-cta {
+  display: block;
+  text-align: center;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border-bright);
+  transition: all 0.2s;
+}
+.pkg-cta:hover { border-color: var(--accent); color: var(--accent); }
+.pkg-featured .pkg-cta {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+.pkg-featured .pkg-cta:hover { background: #ff7d35; color: white; }
+
+.pkg-note {
+  text-align: center;
+  margin-top: 32px;
+  color: var(--text-mute);
+  font-size: 0.92rem;
+}
+.pkg-note a { color: var(--accent); text-decoration: none; }
+.pkg-note a:hover { text-decoration: underline; }
+
+/* ===== WHY US ===== */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+.why-item {
+  padding: 28px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 0.2s;
+}
+.why-item:hover { border-color: var(--accent); }
+.why-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-soft);
+  border-radius: 10px;
+  margin-bottom: 18px;
+  color: var(--accent);
+}
+.why-item h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.why-item p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+
+/* ===== CONTACT ===== */
+.contact-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+@media (max-width: 880px) {
+  .contact-wrap { grid-template-columns: 1fr; }
+}
+
+.contact-info-list {
+  list-style: none;
+  margin-top: 32px;
+}
+.contact-info-list li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.contact-info-list li:last-child { border-bottom: none; }
+.contact-info-list a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+}
+.contact-info-list a:hover { color: var(--accent); }
+.contact-icon {
+  width: 40px; height: 40px;
+  background: var(--accent-soft);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.contact-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: block;
+}
+
+.response-promise {
+  margin-top: 32px;
+  padding: 18px 20px;
+  background: rgba(74, 222, 128, 0.08);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.92rem;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.response-promise svg { flex-shrink: 0; color: var(--success); }
+
+form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+@media (max-width: 540px) { .form-row { grid-template-columns: 1fr; } }
+
+.form-field { margin-bottom: 14px; }
+label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+input, select, textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+textarea { resize: vertical; min-height: 100px; }
+
+.checkbox-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 18px 0;
+  font-size: 0.88rem;
+  color: var(--text-dim);
+}
+.checkbox-row input { width: auto; margin-top: 3px; }
+
+form .btn-primary { width: 100%; justify-content: center; }
+.form-status { margin-top: 14px; font-size: 0.92rem; min-height: 1.2em; }
+.form-status.ok { color: var(--success); }
+.form-status.err { color: #ff6b6b; }
+
+/* ===== FOOTER ===== */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 0;
+  margin-top: 40px;
+  color: var(--text-mute);
+  font-size: 0.9rem;
+}
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+}
+footer a { color: var(--text-dim); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+
+/* ===== Floating WhatsApp ===== */
+.fab-whatsapp {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px; height: 56px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45);
+  z-index: 50;
+  transition: transform 0.2s;
+  text-decoration: none;
+}
+.fab-whatsapp:hover { transform: scale(1.08); }
+
+/* ===== B2B ABONAMENTE ===== */
+.b2b-section {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-elev) 100%);
+  border-top: 1px solid var(--border);
+}
+.pkg-period {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text-mute);
+  margin-left: 4px;
+}
+.pkg-discount {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--success);
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  padding: 4px 10px;
+  border-radius: 100px;
+  margin-top: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.b2b-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 48px;
+  margin-bottom: 16px;
+}
+.b2b-info-card {
+  padding: 24px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.b2b-info-card .icon-wrap {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  background: var(--accent-soft);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+.b2b-info-card h4 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.b2b-info-card p {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.55;
+}
+
+/* "La cerere" small note */
+.cabling-note {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: var(--bg-elev);
+  border: 1px dashed var(--border-bright);
+  border-radius: 10px;
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.cabling-note svg { flex-shrink: 0; color: var(--text-mute); }
+.cabling-note strong { color: var(--text); }
+
+/* ===== BUNDLE BANNER (intre sectiuni) ===== */
+.bundle-banner {
+  margin: 0 auto;
+  padding: 32px 40px;
+  background: linear-gradient(135deg, rgba(255, 107, 26, 0.15) 0%, rgba(26, 43, 92, 0.25) 100%);
+  border: 1px solid rgba(255, 107, 26, 0.4);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.bundle-banner-text { flex: 1; min-width: 280px; }
+.bundle-banner-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+.bundle-banner h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.bundle-banner p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.bundle-banner-discount {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.bundle-banner-discount-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ===== SECTIUNEA WINDOWS - mic indicator pe carduri ===== */
+.section-domain-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: var(--bg-elev);
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+.section-domain-tag.networking { color: var(--accent); border-color: rgba(255, 107, 26, 0.3); }
+.section-domain-tag.windows { color: #4FA8FF; border-color: rgba(79, 168, 255, 0.3); }
+
+/* Animations on load */
+.fade-up {
+  animation: fadeUp 0.7s ease-out backwards;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <span class="logo-mark"><span></span><span></span><span></span><span></span></span>
+      NetwaySolutions
+    </div>
+    <div class="nav-links">
+      <a href="#abonamente">Networking</a>
+      <a href="#abonamente-windows">Windows</a>
+      <a href="#pachete">Servicii</a>
+      <a href="#de-ce-noi">De ce noi</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="nav-cta">Solicită ofertă</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-tag fade-up" style="animation-delay: 0.05s">
+      Soluții profesionale de networking
+    </div>
+    <h1 class="fade-up" style="animation-delay: 0.15s">
+      Rețele care merg.<br>
+      Fără <span class="accent">compromisuri</span>
+    </h1>
+    <p class="hero-sub fade-up" style="animation-delay: 0.25s">
+      Configurez, securizez și administrez infrastructuri de rețea pe FortiGate, Cisco, Aruba, UniFi, Zyxel și MikroTik.
+      Plus, prin partener dedicat, servicii complete pe Windows Server, Active Directory, virtualizare și Microsoft 365.
+    </p>
+    <div class="hero-actions fade-up" style="animation-delay: 0.35s">
+      <a href="#abonamente" class="btn btn-primary">
+        Vezi serviciile
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="https://wa.me/40732972731?text=Salut!%20Sunt%20interesat%20de%20serviciile%20NetwaySolutions." class="btn btn-whatsapp" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+        WhatsApp
+      </a>
+      <a href="tel:+40732972731" class="btn btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Sună acum
+      </a>
+    </div>
+
+    <div class="hero-trust fade-up" style="animation-delay: 0.5s">
+      <div class="trust-item">
+        <span class="trust-num">7+ ani</span>
+        <span class="trust-label">experiență</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-num">24h</span>
+        <span class="trust-label">timp de răspuns</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-num">Enterprise</span>
+        <span class="trust-label">echipamente</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-num">B2B & B2C</span>
+        <span class="trust-label">soluții complete</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== B2B ABONAMENTE (PRIMA SECTIUNE) ===== -->
+<section id="abonamente" class="b2b-section">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-domain-tag networking">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+        Networking
+      </span>
+      <div class="section-tag">// ABONAMENTE B2B</div>
+      <h2>Administrare lunară infrastructură de rețea</h2>
+      <p class="section-sub">
+        Pentru companii care vor predictibilitate și expertiză continuă pe FortiGate, Cisco, Aruba, UniFi, Zyxel
+        și alte echipamente enterprise. Buget fix, SLA garantat, management proactiv.
+      </p>
+    </div>
+
+    <div class="packages-grid">
+
+      <!-- STARTER -->
+      <div class="pkg">
+        <div class="pkg-name">Starter</div>
+        <div class="pkg-target">Single-site, până la 12 utilizatori, infrastructură standard</div>
+        <div class="pkg-price">
+          <span class="pkg-price-from">de la</span>
+          <span class="pkg-price-amt">1000</span>
+          <span class="pkg-price-cur">RON</span>
+          <span class="pkg-period">/ lună</span>
+        </div>
+        <ul class="pkg-features">
+          <li>Administrare firewall + switch-uri + AP-uri</li>
+          <li>Monitorizare 24/7 (uptime, throughput, alerte)</li>
+          <li>Modificări de configurație remote</li>
+          <li>2 ore on-site / lună pentru urgente</li>
+          <li>Timp de răspuns: 12h business</li>
+          <li>Backup automat configurații</li>
+          <li>Update-uri firmware programate</li>
+          <li>Raport scurt trimestrial</li>
+        </ul>
+        <a href="#contact" class="pkg-cta" data-pkg="Abonament Starter">Programează o discuție</a>
+      </div>
+
+      <!-- BUSINESS -->
+      <div class="pkg pkg-featured">
+        <div class="pkg-name">Business</div>
+        <div class="pkg-target">2–3 sedii, până la 50 utilizatori, infrastructură mid-complexity</div>
+        <div class="pkg-price">
+          <span class="pkg-price-from">de la</span>
+          <span class="pkg-price-amt">2.500</span>
+          <span class="pkg-price-cur">RON</span>
+          <span class="pkg-period">/ lună</span>
+        </div>
+        <ul class="pkg-features">
+          <li>Tot ce conține Starter</li>
+          <li>Management VPN site-to-site (IPSec) între sedii</li>
+          <li>Administrare VPN remote workers (până la 25 useri)</li>
+          <li>Politici UTM, IPS, web/app filtering</li>
+          <li>Segmentare VLAN + ACL inter-VLAN</li>
+          <li>4 ore on-site / lună pentru urgente</li>
+          <li>Timp de răspuns: 4h, prioritate</li>
+          <li>Audit trimestrial de securitate</li>
+          <li>Raport lunar detaliat</li>
+        </ul>
+        <a href="#contact" class="pkg-cta" data-pkg="Abonament Business">Programează o discuție</a>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="pkg">
+        <div class="pkg-name">Enterprise</div>
+        <div class="pkg-target">Multi-sediu, 100+ utilizatori, routing dinamic, HA, scale mare</div>
+        <div class="pkg-price">
+          <span class="pkg-price-from">de la</span>
+          <span class="pkg-price-amt">5.000</span>
+          <span class="pkg-price-cur">RON</span>
+          <span class="pkg-period">/ lună</span>
+        </div>
+        <ul class="pkg-features">
+          <li>Tot ce conține Business</li>
+          <li>Management BGP / OSPF (multi-area, redistribuție)</li>
+          <li>Topologii VPN mesh sau hub-and-spoke (4+ locații)</li>
+          <li>SSL/IPSec VPN scale mare (50+ useri) cu MFA</li>
+          <li>Management cluster HA firewall</li>
+          <li>SD-WAN / multi-WAN policy routing</li>
+          <li>Integrare RADIUS / Active Directory / LDAP</li>
+          <li>Intervenții on-site nelimitate</li>
+          <li>SLA strict: răspuns 2–4h, weekend programat</li>
+          <li>Raport lunar + ședință review trimestrială</li>
+        </ul>
+        <a href="#contact" class="pkg-cta" data-pkg="Abonament Enterprise">Programează o discuție</a>
+      </div>
+
+    </div>
+
+    <div class="b2b-info-grid">
+      <div class="b2b-info-card">
+        <div class="icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        </div>
+        <div>
+          <h4>Onboarding fee</h4>
+          <p>La începutul colaborării: audit complet al rețelei, documentare echipamente, topologii L2/L3 și inventar. <strong>De la 1.000 RON</strong>, plată unică. Asigură că pornim de pe o bază solidă.</p>
+        </div>
+      </div>
+
+      <div class="b2b-info-card">
+        <div class="icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div>
+          <h4>Discount contract 12 luni</h4>
+          <p>Semnezi contract pe 12 luni? Primești <strong>2 luni gratuite</strong> (echivalent ~17% reducere)</p>
+        </div>
+      </div>
+
+      <div class="b2b-info-card">
+        <div class="icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div>
+          <h4>Ce nu e inclus</h4>
+          <p>Hardware nou (firewall, switch, AP-uri), licențe FortiGuard / vendor, lucrări de cablare, intervenții în afara orelor de program (decât cu programare). Toate, ofertate transparent înainte.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="pkg-note">
+      Vrei o ofertă personalizată pentru infrastructura ta? <a href="#contact">Programează o discuție gratuită de 30 minute</a> — analizăm împreună topologia și nevoile reale.
+    </p>
+  </div>
+</section>
+
+<!-- ===== BUNDLE BANNER ===== -->
+<section style="padding: 0; background: var(--bg);">
+  <div class="container">
+    <div class="bundle-banner">
+      <div class="bundle-banner-text">
+        <span class="bundle-banner-tag">// Bundle Networking + Windows</span>
+        <h3>Un singur partener pentru tot IT-ul tău</h3>
+        <p>Combină un abonament Networking cu unul Windows / Microsoft Infrastructure și primești <strong>5% reducere</strong> permanentă pe ambele. Un singur punct de contact, o singură factură, comunicare directă cu specialiștii.</p>
+      </div>
+      <div>
+        <div class="bundle-banner-discount">−5%</div>
+        <div class="bundle-banner-discount-label">discount permanent</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== B2B ABONAMENTE WINDOWS ===== -->
+<section id="abonamente-windows" class="b2b-section">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-domain-tag windows">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M0 3.5l9.6-1.3v9.27H0V3.5zm0 17l9.6 1.3v-9.13H0V20.5zM10.65 22.04L24 24v-11.4H10.65v9.44zM10.65 1.95V11.4H24V0L10.65 1.95z"/></svg>
+        Windows / Microsoft
+      </span>
+      <div class="section-tag">// ABONAMENTE B2B</div>
+      <h2>Administrare lunară servere și infrastructură Microsoft</h2>
+      <p class="section-sub">
+        Servicii livrate prin partener dedicat, specialist Windows Server, Active Directory, virtualizare și Microsoft 365.
+        Aceeași filosofie ca pe networking: SLA garantat, buget previzibil, expertiză reală.
+      </p>
+    </div>
+
+    <div class="packages-grid">
+
+      <!-- WIN STARTER -->
+      <div class="pkg">
+        <div class="pkg-name">Starter</div>
+        <div class="pkg-target">Single-server, până la 15 utilizatori, infrastructură Microsoft de bază</div>
+        <div class="pkg-price">
+          <span class="pkg-price-from">de la</span>
+          <span class="pkg-price-amt">1.000</span>
+          <span class="pkg-price-cur">RON</span>
+          <span class="pkg-period">/ lună</span>
+        </div>
+        <ul class="pkg-features">
+          <li>Administrare Windows Server (1 server fizic sau virtual)</li>
+          <li>Active Directory + Group Policy basic</li>
+          <li>File Share / Print Server</li>
+          <li>Microsoft 365 / Exchange Online — administrare conturi</li>
+          <li>Patch management (WSUS)</li>
+          <li>Backup zilnic verificat</li>
+          <li>Monitorizare uptime + resurse</li>
+          <li>Timp de răspuns: 12h business</li>
+          <li>2 ore on-site / lună pentru urgențe</li>
+        </ul>
+        <a href="#contact" class="pkg-cta" data-pkg="Windows Starter">Programează o discuție</a>
+      </div>
+
+      <!-- WIN BUSINESS -->
+      <div class="pkg pkg-featured">
+        <div class="pkg-name">Business</div>
+        <div class="pkg-target">Multi-server, 15–50 utilizatori, virtualizare, Exchange/M365 integrat</div>
+        <div class="pkg-price">
+          <span class="pkg-price-from">de la</span>
+          <span class="pkg-price-amt">2.500</span>
+          <span class="pkg-price-cur">RON</span>
+          <span class="pkg-period">/ lună</span>
+        </div>
+        <ul class="pkg-features">
+          <li>Tot ce conține Starter</li>
+          <li>Administrare cluster virtualizare (Hyper-V, VMware, Proxmox)</li>
+          <li>Active Directory + GPO avansat, OU-uri, delegări</li>
+          <li>Exchange Server on-prem sau Microsoft 365 Business</li>
+          <li>RADIUS / NPS pentru autentificare</li>
+          <li>Backup & Disaster Recovery (Veeam sau echivalent)</li>
+          <li>SharePoint / Teams administration</li>
+          <li>Timp de răspuns: 4h, prioritate</li>
+          <li>4 ore on-site / lună pentru urgențe</li>
+          <li>Audit trimestrial securitate</li>
+        </ul>
+        <a href="#contact" class="pkg-cta" data-pkg="Windows Business">Programează o discuție</a>
+      </div>
+
+      <!-- WIN ENTERPRISE -->
+      <div class="pkg">
+        <div class="pkg-name">Enterprise</div>
+        <div class="pkg-target">Multi-DC, 50+ utilizatori, HA, DR site, infrastructură critică</div>
+        <div class="pkg-price">
+          <span class="pkg-price-from">de la</span>
+          <span class="pkg-price-amt">5.000</span>
+          <span class="pkg-price-cur">RON</span>
+          <span class="pkg-period">/ lună</span>
+        </div>
+        <ul class="pkg-features">
+          <li>Tot ce conține Business</li>
+          <li>Multi-Domain Controller, replicare AD, FSMO management</li>
+          <li>Hypervisor cluster cu HA + Live Migration</li>
+          <li>Disaster Recovery site cu replicare</li>
+          <li>SCCM / Intune pentru endpoint management</li>
+          <li>Microsoft 365 E3/E5 cu Conditional Access, Defender</li>
+          <li>Hybrid identity (Azure AD Connect)</li>
+          <li>Intervenții on-site nelimitate</li>
+          <li>SLA strict: răspuns 2–4h, weekend programat</li>
+          <li>Raport lunar + ședință review trimestrială</li>
+        </ul>
+        <a href="#contact" class="pkg-cta" data-pkg="Windows Enterprise">Programează o discuție</a>
+      </div>
+
+    </div>
+
+    <p class="pkg-note">
+      Ai infrastructură mixtă (rețea + servere)? <a href="#contact">Programează o discuție</a> — coordonăm totul printr-un singur punct de contact.
+    </p>
+  </div>
+</section>
+
+<!-- ===== PACKAGES ONE-TIME (DUPA ABONAMENTE) ===== -->
+<section id="pachete">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-domain-tag networking">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+        Networking
+      </span>
+      <div class="section-tag">// SERVICII LA CERERE</div>
+      <h2>Pachete pentru proiecte și implementări one-time</h2>
+      <p class="section-sub">
+        Configurări one-time pentru implementări noi, migrări, sau extinderi.
+        Pachetele sunt structurate pe complexitatea infrastructurii — prețul final îl confirmăm după ce înțeleg topologia.
+      </p>
+    </div>
+
+    <div class="packages-grid">
+
+      <!-- ESSENTIAL -->
+      <div class="pkg">
+        <div class="pkg-name">Essential</div>
+        <div class="pkg-target">Single-site, configurări standard, fără cerințe avansate</div>
+        <div class="pkg-price">
+          <span class="pkg-price-from">de la</span>
+          <span class="pkg-price-amt">1.000</span>
+          <span class="pkg-price-cur">RON</span>
+        </div>
+        <ul class="pkg-features">
+          <li>Configurare router/firewall single-site (FortiGate, MikroTik, Cisco, UniFi, Zyxel)</li>
+          <li>Configurare VLAN-uri și inter-VLAN routing de bază</li>
+          <li>Configurare access points / controller (UniFi, Aruba, Omada)</li>
+          <li>Politici firewall standard, NAT, port forwarding</li>
+          <li>Până la 5 SSID-uri / VLAN-uri</li>
+          <li>Documentație de bază + backup configurație</li>
+          <li>Suport telefonic 5 zile post-livrare</li>
+        </ul>
+        <a href="#contact" class="pkg-cta" data-pkg="Essential">Solicită ofertă</a>
+      </div>
+
+      <!-- PROFESSIONAL -->
+      <div class="pkg pkg-featured">
+        <div class="pkg-name">Professional</div>
+        <div class="pkg-target">Multi-sediu, VPN, securitate avansată, cerințe enterprise</div>
+        <div class="pkg-price">
+          <span class="pkg-price-from">de la</span>
+          <span class="pkg-price-amt">3.000</span>
+          <span class="pkg-price-cur">RON</span>
+        </div>
+        <ul class="pkg-features">
+          <li>Tot ce conține Essential</li>
+          <li>VPN site-to-site (IPSec) între 2–3 sedii</li>
+          <li>SSL VPN cu autentificare locală (până la 25 useri)</li>
+          <li>Routing dinamic basic (OSPF single-area)</li>
+          <li>Politici firewall avansate (UTM, IPS, web filtering, app control)</li>
+          <li>HA firewall — cluster active-passive</li>
+          <li>Integrare RADIUS / LDAP basic</li>
+          <li>Segmentare avansată VLAN cu ACL inter-VLAN</li>
+          <li>Documentație completă (diagrame L2/L3)</li>
+          <li>Suport telefonic 10 zile post-livrare</li>
+        </ul>
+        <a href="#contact" class="pkg-cta" data-pkg="Professional">Solicită ofertă</a>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="pkg">
+        <div class="pkg-name">Enterprise</div>
+        <div class="pkg-target">Routing dinamic complex, scale mare, infrastructură critică</div>
+        <div class="pkg-price">
+          <span class="pkg-price-from">de la</span>
+          <span class="pkg-price-amt">6.000</span>
+          <span class="pkg-price-cur">RON</span>
+        </div>
+        <ul class="pkg-features">
+          <li>Tot ce conține Professional</li>
+          <li>BGP cu unul sau mai mulți ISP (eBGP/iBGP)</li>
+          <li>OSPF multi-area cu redistribuție</li>
+          <li>VPN site-to-site mesh (4+ locații) sau hub-and-spoke</li>
+          <li>SSL/IPSec VPN scale mare (50+ useri) cu MFA</li>
+          <li>Multi-WAN cu SD-WAN sau policy-based routing</li>
+          <li>ZTNA / Zero Trust setup</li>
+          <li>Integrare AD + 2FA (FortiAuthenticator etc.)</li>
+          <li>Migrare echipamente fără downtime (cutover plan)</li>
+          <li>Documentație enterprise (LLD, HLD, change management)</li>
+          <li>Suport telefonic 15 zile post-livrare</li>
+        </ul>
+        <a href="#contact" class="pkg-cta" data-pkg="Enterprise One-Time">Solicită ofertă</a>
+      </div>
+
+    </div>
+
+    <p class="pkg-note">
+      Nu te încadrezi exact într-un pachet? <a href="#contact">Trimite-mi o scurtă descriere a infrastructurii</a> — îți recomand soluția potrivită.
+    </p>
+
+    <div class="cabling-note">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <span><strong>Cablare structurată</strong> — la cerere, prin partener de încredere. Coordonez eu lucrarea de la cap la coadă.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICII LA CERERE WINDOWS ===== -->
+<section id="pachete-windows" class="b2b-section">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-domain-tag windows">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M0 3.5l9.6-1.3v9.27H0V3.5zm0 17l9.6 1.3v-9.13H0V20.5zM10.65 22.04L24 24v-11.4H10.65v9.44zM10.65 1.95V11.4H24V0L10.65 1.95z"/></svg>
+        Windows / Microsoft
+      </span>
+      <div class="section-tag">// SERVICII LA CERERE</div>
+      <h2>Implementări și migrări Windows / Microsoft</h2>
+      <p class="section-sub">
+        Proiecte one-time pe Windows Server, virtualizare, Exchange și Microsoft 365.
+        Livrate prin partener dedicat, coordonate printr-un singur punct de contact.
+      </p>
+    </div>
+
+    <div class="packages-grid">
+
+      <!-- WIN ESSENTIAL ONE-TIME -->
+      <div class="pkg">
+        <div class="pkg-name">Essential</div>
+        <div class="pkg-target">Server standalone, AD basic, configurări standard</div>
+        <div class="pkg-price">
+          <span class="pkg-price-from">de la</span>
+          <span class="pkg-price-amt">1.000</span>
+          <span class="pkg-price-cur">RON</span>
+        </div>
+        <ul class="pkg-features">
+          <li>Instalare și configurare Windows Server (1 server)</li>
+          <li>Active Directory + DNS + DHCP basic</li>
+          <li>File Share / Print Server cu permisiuni</li>
+          <li>Configurare Microsoft 365 — tenant, conturi, licențiere</li>
+          <li>Politici de securitate basic</li>
+          <li>Configurare backup local</li>
+          <li>Documentație de bază</li>
+          <li>Suport telefonic 5 zile post-livrare</li>
+        </ul>
+        <a href="#contact" class="pkg-cta" data-pkg="Windows Essential">Solicită ofertă</a>
+      </div>
+
+      <!-- WIN PROFESSIONAL ONE-TIME -->
+      <div class="pkg pkg-featured">
+        <div class="pkg-name">Professional</div>
+        <div class="pkg-target">Virtualizare, AD avansat, Exchange/M365 migration</div>
+        <div class="pkg-price">
+          <span class="pkg-price-from">de la</span>
+          <span class="pkg-price-amt">3.000</span>
+          <span class="pkg-price-cur">RON</span>
+        </div>
+        <ul class="pkg-features">
+          <li>Tot ce conține Essential</li>
+          <li>Implementare hypervisor (Hyper-V, VMware ESXi, Proxmox)</li>
+          <li>Multi-server cu virtualizare (până la 5 VM-uri)</li>
+          <li>Active Directory + GPO avansat, OU-uri</li>
+          <li>Migrare Exchange on-prem sau migrare email → Microsoft 365</li>
+          <li>RADIUS / NPS pentru autentificare WiFi/VPN</li>
+          <li>Backup & Disaster Recovery setup (Veeam)</li>
+          <li>WSUS / patch management</li>
+          <li>Documentație completă (topologie, procese)</li>
+          <li>Suport telefonic 10 zile post-livrare</li>
+        </ul>
+        <a href="#contact" class="pkg-cta" data-pkg="Windows Professional">Solicită ofertă</a>
+      </div>
+
+      <!-- WIN ENTERPRISE ONE-TIME -->
+      <div class="pkg">
+        <div class="pkg-name">Enterprise</div>
+        <div class="pkg-target">Bare-metal, cluster HA, multi-DC, migrări complexe</div>
+        <div class="pkg-price">
+          <span class="pkg-price-from">de la</span>
+          <span class="pkg-price-amt">6.000</span>
+          <span class="pkg-price-cur">RON</span>
+        </div>
+        <ul class="pkg-features">
+          <li>Tot ce conține Professional</li>
+          <li>Bare-metal hypervisor deployment (servere fizice noi)</li>
+          <li>Cluster virtualizare cu HA + Live Migration</li>
+          <li>Multi-Domain Controller, replicare, FSMO</li>
+          <li>Disaster Recovery site cu replicare</li>
+          <li>Hybrid identity (Azure AD Connect)</li>
+          <li>SCCM / Intune deployment</li>
+          <li>Microsoft 365 E3/E5 cu Conditional Access, Defender</li>
+          <li>Migrări complexe fără downtime (cutover plan)</li>
+          <li>Documentație enterprise (LLD, HLD, runbook)</li>
+          <li>Suport telefonic 15 zile post-livrare</li>
+        </ul>
+        <a href="#contact" class="pkg-cta" data-pkg="Windows Enterprise One-Time">Solicită ofertă</a>
+      </div>
+
+    </div>
+
+    <p class="pkg-note">
+      Nu te încadrezi exact într-un pachet? <a href="#contact">Trimite-mi o scurtă descriere</a> — discutăm și construim soluția potrivită.
+    </p>
+  </div>
+</section>
+
+<!-- ===== WHY US ===== -->
+<section id="de-ce-noi" style="background: var(--bg-elev);">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-tag">// DE CE NOI</div>
+      <h2>Ce înseamnă să lucrezi cu NetwaySolutions</h2>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Vendor-agnostic, dar exigent</h3>
+        <p>Lucrez cu Fortinet, Cisco, Aruba, UniFi, Zyxel, MikroTik. Recomand echipamentul potrivit pentru cazul tău — nu cel mai scump, nu cel mai ieftin.</p>
+      </div>
+
+      <div class="why-item">
+        <div class="why-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>SLA respectat</h3>
+        <p>Timpii de răspuns sunt în contract, nu în goodwill. Clienții cu abonament au prioritate la intervenții.</p>
+      </div>
+
+      <div class="why-item">
+        <div class="why-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <h3>Documentație serioasă</h3>
+        <p>Diagrame L2/L3, backup configurații, parole în vault. Dacă mâine vine altcineva, găsește ordine.</p>
+      </div>
+
+      <div class="why-item">
+        <div class="why-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3>Soluții care scalează</h3>
+        <p>VLAN-uri segmentate corect de la început, routing flexibil, HA acolo unde se justifică. Adaugi un sediu nou — se integrează curat.</p>
+      </div>
+
+      <div class="why-item">
+        <div class="why-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h3>Securitate prin design</h3>
+        <p>UTM, IPS, segmentare strictă VLAN, ZTNA acolo unde se justifică, audit periodic. Securitatea nu e opțională, e arhitectură.</p>
+      </div>
+
+      <div class="why-item">
+        <div class="why-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3>Comunicare directă</h3>
+        <p>Vorbesc direct cu IT-ul tău (sau cu CFO, după caz). Tehnic acolo unde trebuie, simplu unde e nevoie. Fără vagueness.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-tag">// CONTACT</div>
+      <h2>Solicită ofertă sau programează o discuție</h2>
+      <p class="section-sub">Completează formularul, dă un mesaj pe WhatsApp sau sună direct — alege canalul cel mai comod pentru tine.</p>
+    </div>
+
+    <div class="contact-wrap">
+      <div>
+        <h3 style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.3rem; font-weight: 700;">Hai să discutăm</h3>
+        <p style="color: var(--text-dim); margin-top: 8px;">Spune-mi ce ai nevoie și revin cu o estimare. Pentru proiecte concrete stabilim împreună următorii pași.</p>
+
+        <ul class="contact-info-list">
+          <li>
+            <div class="contact-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div>
+              <span class="contact-label">Telefon</span>
+              <a href="tel:+40732972731">0732 972 731</a>
+            </div>
+          </li>
+          <li>
+            <div class="contact-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+            </div>
+            <div>
+              <span class="contact-label">WhatsApp</span>
+              <a href="https://wa.me/40732972731" target="_blank" rel="noopener">0732 972 731</a>
+            </div>
+          </li>
+          <li>
+            <div class="contact-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <span class="contact-label">Email</span>
+              <a href="mailto:contact@netwaysolutions.ro">contact@netwaysolutions.ro</a>
+            </div>
+          </li>
+          <li>
+            <div class="contact-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <span class="contact-label">Acoperire</span>
+              <span style="color: var(--text);">București, Ilfov & împrejurimi</span>
+            </div>
+          </li>
+        </ul>
+
+        <div class="response-promise">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Răspund la fiecare cerere <strong>în maximum 24 de ore</strong>. De obicei mult mai repede.</span>
+        </div>
+      </div>
+
+      <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+        <!-- INSTRUCTION: Replace YOUR_ACCESS_KEY_HERE with your real Web3Forms access key from web3forms.com (it's free) -->
+        <input type="hidden" name="access_key" value="1a19cf3e-2af6-4617-9417-89589ea94daf">
+        <input type="hidden" name="subject" value="Cerere ofertă - NetwaySolutions">
+        <input type="hidden" name="from_name" value="Site NetwaySolutions">
+        <input type="checkbox" name="botcheck" style="display:none">
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="nume">Nume *</label>
+            <input type="text" id="nume" name="nume" required>
+          </div>
+          <div class="form-field">
+            <label for="telefon">Telefon *</label>
+            <input type="tel" id="telefon" name="telefon" required>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email">
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="pachet">Serviciu de interes</label>
+            <select id="pachet" name="pachet">
+              <option value="Nu sunt sigur">Nu sunt sigur încă</option>
+              <optgroup label="🌐 Networking — Abonamente lunare">
+                <option value="Abonament Starter">Networking Starter</option>
+                <option value="Abonament Business">Networking Business</option>
+                <option value="Abonament Enterprise">Networking Enterprise</option>
+              </optgroup>
+              <optgroup label="🌐 Networking — Servicii la cerere">
+                <option value="Essential">Networking Essential (one-time)</option>
+                <option value="Professional">Networking Professional (one-time)</option>
+                <option value="Enterprise One-Time">Networking Enterprise (one-time)</option>
+              </optgroup>
+              <optgroup label="🪟 Windows — Abonamente lunare">
+                <option value="Windows Starter">Windows Starter</option>
+                <option value="Windows Business">Windows Business</option>
+                <option value="Windows Enterprise">Windows Enterprise</option>
+              </optgroup>
+              <optgroup label="🪟 Windows — Servicii la cerere">
+                <option value="Windows Essential">Windows Essential (one-time)</option>
+                <option value="Windows Professional">Windows Professional (one-time)</option>
+                <option value="Windows Enterprise One-Time">Windows Enterprise (one-time)</option>
+              </optgroup>
+              <optgroup label="📦 Bundle">
+                <option value="Bundle Networking + Windows">Networking + Windows (cu 5% discount)</option>
+              </optgroup>
+              <option value="Cablare structurată">Cablare structurată</option>
+              <option value="Audit / consultanță">Audit / consultanță punctuală</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="marime">Mărime infrastructură</label>
+            <select id="marime" name="marime">
+              <option value="Sub 25 utilizatori, single-site">Sub 25 utilizatori, single-site</option>
+              <option value="25-100 utilizatori, 1-3 sedii">25–100 utilizatori, 1–3 sedii</option>
+              <option value="100+ utilizatori, multi-sediu">100+ utilizatori, multi-sediu</option>
+              <option value="Persoană fizică / proiect mic">Persoană fizică / proiect mic</option>
+              <option value="Nu știu sigur">Nu știu sigur</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="locatie">Locație (oraș/zonă)</label>
+          <input type="text" id="locatie" name="locatie" placeholder="ex: București, sector 3">
+        </div>
+
+        <div class="form-field">
+          <label for="mesaj">Detalii proiect</label>
+          <textarea id="mesaj" name="mesaj" placeholder="Echipamente actuale (FortiGate, Cisco, UniFi, Windows Server, Hyper-V etc.), număr utilizatori, topologie, ce vrei să obții, deadline..."></textarea>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" required>
+          <span>Sunt de acord cu prelucrarea datelor pentru a fi contactat în legătură cu această cerere.</span>
+        </label>
+
+        <button type="submit" class="btn btn-primary">
+          Trimite cererea
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="form-status" id="formStatus"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>© <span id="year"></span> NetwaySolutions. Toate drepturile rezervate.</div>
+      <div>
+        <a href="#contact">Contact</a> · <a href="#abonamente">Networking</a> · <a href="#abonamente-windows">Windows</a> · <a href="#pachete">Servicii</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/40732972731" class="fab-whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+</a>
+
+<script>
+// Year
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Pre-select package when clicking package CTAs
+document.querySelectorAll('[data-pkg]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const pkg = btn.dataset.pkg;
+    setTimeout(() => {
+      const sel = document.getElementById('pachet');
+      if (sel) sel.value = pkg;
+    }, 400);
+  });
+});
+
+// Form submit
+const form = document.getElementById('contactForm');
+const status = document.getElementById('formStatus');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  status.className = 'form-status';
+  status.textContent = 'Se trimite...';
+
+  const formData = new FormData(form);
+  try {
+    const res = await fetch(form.action, { method: 'POST', body: formData });
+    const json = await res.json();
+    if (json.success) {
+      status.className = 'form-status ok';
+      status.textContent = '✓ Cerere trimisă! Te contactez în maximum 24 de ore.';
+      form.reset();
+    } else {
+      throw new Error(json.message || 'Eroare necunoscută');
+    }
+  } catch (err) {
+    status.className = 'form-status err';
+    status.textContent = '✗ A apărut o problemă. Te rog sună sau scrie pe WhatsApp.';
+  }
+});
+</script>
+
+</body>
+</html>
